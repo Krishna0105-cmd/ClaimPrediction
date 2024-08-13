@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claim Prediction</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 80vh; /* Limit the height of the container */
+            overflow-y: auto; /* Add scrollbar if content overflows */
+        }
+
+        .title {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #8a2be2; /* Light Purple Color */
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 15px; /* Reduced margin */
+        }
+
+        .form-group label {
+            font-weight: bold;
+            font-size: 0.9rem; /* Adjusted font size */
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            padding: 8px; /* Reduced padding */
+            width: 100%;
+            font-size: 0.9rem; /* Adjusted font size */
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #8a2be2; /* Light Purple Color */
+            outline: none;
+        }
+
+        .btn-primary {
+            background: #8a2be2; /* Light Purple Color */
+            border: none;
+            border-radius: 25px;
+            padding: 8px 15px; /* Adjusted padding */
+            font-size: 0.9rem; /* Adjusted font size */
+            font-weight: bold;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #6a1b9a; /* Darker Purple for Hover */
+        }
+
+        @media (min-width: 768px) {
+            .row {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            .form-group {
+                flex: 1 1 50%;
+                padding: 0 15px;
+            }
+
+            .form-group:nth-child(even) {
+                padding-right: 30px;
+            }
+
+            .form-group:nth-child(odd) {
+                padding-left: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-group {
+                margin-bottom: 15px;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="title">Claim Amount Prediction</div>
+        <form action="{{ url_for('predict') }}" method="post">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="InscClaimAmtReimbursed">InscClaimAmtReimbursed:</label>
+                    <input type="text" class="form-control" id="InscClaimAmtReimbursed" name="InscClaimAmtReimbursed" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="IPAnnualReimbursementAmt">IPAnnualReimbursementAmt:</label>
+                    <input type="text" class="form-control" id="IPAnnualReimbursementAmt" name="IPAnnualReimbursementAmt" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="OPAnnualReimbursementAmt">OPAnnualReimbursementAmt:</label>
+                    <input type="text" class="form-control" id="OPAnnualReimbursementAmt" name="OPAnnualReimbursementAmt" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="ChronicCond_Cancer">ChronicCond_Cancer (0 or 1):</label>
+                    <input type="text" class="form-control" id="ChronicCond_Cancer" name="ChronicCond_Cancer" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="ChronicCond_ObstrPulmonary">ChronicCond_ObstrPulmonary (0 or 1):</label>
+                    <input type="text" class="form-control" id="ChronicCond_ObstrPulmonary" name="ChronicCond_ObstrPulmonary" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="Race_2">Race_2 (0 or 1):</label>
+                    <input type="text" class="form-control" id="Race_2" name="Race_2" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="Race_3">Race_3 (0 or 1):</label>
+                    <input type="text" class="form-control" id="Race_3" name="Race_3" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="Race_5">Race_5 (0 or 1):</label>
+                    <input type="text" class="form-control" id="Race_5" name="Race_5" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="Gender_2">Gender_2 (0 or 1):</label>
+                    <input type="text" class="form-control" id="Gender_2" name="Gender_2" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="ChronicCond_Alzheimer">ChronicCond_Alzheimer (0 or 1):</label>
+                    <input type="text" class="form-control" id="ChronicCond_Alzheimer" name="ChronicCond_Alzheimer" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="ChronicCond_KidneyDisease">ChronicCond_KidneyDisease (0 or 1):</label>
+                    <input type="text" class="form-control" id="ChronicCond_KidneyDisease" name="ChronicCond_KidneyDisease" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="ChronicCond_Heartfailure">ChronicCond_Heartfailure (0 or 1):</label>
+                    <input type="text" class="form-control" id="ChronicCond_Heartfailure" name="ChronicCond_Heartfailure" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Predict</button>
+        </form>
+        {% if prediction_text %}
+        <div class="alert alert-info mt-4">
+            <h4>{{ prediction_text | replace('$', '₹') }}</h4> <!-- Replace $ with ₹ -->
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>

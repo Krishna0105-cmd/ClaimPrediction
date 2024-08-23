@@ -3,6 +3,7 @@ import pickle
 from flask import Flask, request, jsonify, render_template
 import numpy as np
 import pandas as pd
+import mlflow
 
 app = Flask(__name__)
 
@@ -30,8 +31,15 @@ def predict():
     # Make prediction
     output = regmodel.predict(final_input)[0]
     
+    # Log the input and prediction using MLflow
+    with mlflow.start_run():
+        mlflow.log_param("input_data", data)
+        mlflow.log_metric("predicted_claim_amount", output)
+    
     # Render the home template with the prediction
     return render_template("home.html", prediction_text=f"The predicted claim amount is ${output:,.2f}")
 
 if __name__ == "__main__":
     app.run(debug=True)
+# if __name__ == "__main__":
+#     app.run(port=5002)  # Change 5002 to any other port that is available
